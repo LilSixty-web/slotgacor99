@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Vina!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff6b9d, #ffc3e1, #ff9ec7, #ffb3d9);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 800px;
+      width: 90%;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(255, 105, 157, 0.3);
+      border: 3px solid rgba(255, 182, 193, 0.6);
+      position: relative;
+      overflow: hidden;
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 182, 193, 0.1), transparent);
+      animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .stage {
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stage.active {
+      display: block;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #d63384;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(214, 51, 132, 0.3);
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    h2 {
+      font-size: 2.5em;
+      color: #e91e63;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(233, 30, 99, 0.3);
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #8e3a59;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .emoji {
+      font-size: 2em;
+      display: inline-block;
+      animation: spin 2s linear infinite;
+      margin: 0 10px;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .next-btn, .choice-btn {
+      background: linear-gradient(45deg, #ff6b9d, #e91e63);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.3em;
+      border-radius: 50px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(255, 107, 157, 0.4);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .next-btn:hover, .choice-btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(255, 107, 157, 0.6);
+      background: linear-gradient(45deg, #e91e63, #ff6b9d);
+    }
+
+    .next-btn:active, .choice-btn:active {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .choice-btn.no-btn {
+      background: linear-gradient(45deg, #ffc1cc, #ffb3d9);
+      color: #8e3a59;
+    }
+
+    .choice-btn.no-btn:hover {
+      background: linear-gradient(45deg, #ffb3d9, #ffc1cc);
+    }
+
+    .birthday-message {
+      text-align: left;
+      background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 105, 157, 0.1));
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 5px solid #ff6b9d;
+      margin: 20px 0;
+    }
+
+    .birthday-message p {
+      margin-bottom: 15px;
+      font-size: 1.1em;
+    }
+
+    .hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      color: #ff6b9d;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .cake-emoji {
+      font-size: 4em;
+      margin: 20px 0;
+      display: inline-block;
+      animation: wobble 3s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+    }
+
+    .space {
+      height: 30px;
+    }
+
+    audio {
+      margin-top: 20px;
+      border-radius: 10px;
+      opacity: 0.8;
+    }
+
+    .surprise-text {
+      font-size: 1.4em;
+      color: #d63384;
+      font-weight: bold;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  
+  <div class="container">
+    <div class="card">
+      <!-- Stage 1: Initial Message -->
+      <div class="stage active" id="stage1">
+        <h2>Happy birthday my baby</h2>
+        <div class="cake-emoji">🎂</div>
+        <p class="surprise-text">Click the next button</p>
+        <button class="next-btn" onclick="nextStage()">Next ✨</button>
+      </div>
+
+      <!-- Stage 2: Choice -->
+      <div class="stage" id="stage2">
+        <h2>Do you want to open it?</h2>
+        <div class="emoji">🎁</div>
+        <div class="emoji">💖</div>
+        <div class="emoji">🎉</div>
+        <br><br>
+        <button class="choice-btn" onclick="openGift()">Open it! 🎈</button>
+        <button class="choice-btn no-btn" onclick="sayNo()">No 😅</button>
+      </div>
+
+      <!-- Stage 3: Final Message -->
+      <div class="stage" id="stage3">
+        <div class="birthday-message">
+          <h1>Hi Vina!👋</h1>
+          <p>Happy special birthday to someone truly unforgettable. Today, the world feels a little brighter, because it’s the day you came into it. 🌸</p>
+          
+          <p>Across oceans, beneath stars, and under the same sky, I somehow found myself walking beside you. What are the odds that amidst all the galaxies, I’d meet someone who feels like home? ⭐🌍</p>
+          
+          <p>You bring light where there’s dullness, calm in the chaos, and warmth that stays long after the moment passes. Your presence makes everything more beautiful.</p>
+          
+          <p>May this next chapter of your life overflow with joy, wonder, and all the love you deserve. And as you chase your dreams of becoming an amazing pharmacist, I hope the path rises to meet you, filled with purpose, pride, and every success you’ve worked so hard for. 🌿💊</p>
+          
+          <p>I'm grateful to walk this part of your journey with you. Happy birthday, you’re a rare kind of magic. 🎂✨</p>
+        </div>
+        
+        <div class="space"></div>
+        
+        <audio controls autoplay>
+          <source src="hbd.mp3" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <!-- Stage 4: No Response -->
+      <div class="stage" id="stage4">
+        <h2>Aww come on! 🥺</h2>
+        <p class="surprise-text">You know you want to see what's inside! 💖</p>
+        <div class="emoji">🎁</div>
+        <br><br>
+        <button class="choice-btn" onclick="openGift()">Fine, open it! 🎉</button>
+        <button class="choice-btn no-btn" onclick="reallyNo()">Really, no! 😤</button>
+      </div>
+
+      <!-- Stage 5: Really No Response -->
+      <div class="stage" id="stage5">
+        <h2>Okay okay... 😔</h2>
+        <p>But you're missing out on something special! 💔</p>
+        <div class="emoji">💔</div>
+        <br><br>
+        <button class="choice-btn" onclick="openGift()">Actually... open it! 💝</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStage = 1;
+
+    function nextStage() {
+      document.getElementById('stage1').classList.remove('active');
+      document.getElementById('stage2').classList.add('active');
+      currentStage = 2;
+    }
+
+    function openGift() {
+      // Hide all stages
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById('stage' + i).classList.remove('active');
+      }
+      // Show final message
+      document.getElementById('stage3').classList.add('active');
+      currentStage = 3;
+      createHearts();
+    }
+
+    function sayNo() {
+      document.getElementById('stage2').classList.remove('active');
+      document.getElementById('stage4').classList.add('active');
+      currentStage = 4;
+    }
+
+    function reallyNo() {
+      document.getElementById('stage4').classList.remove('active');
+      document.getElementById('stage5').classList.add('active');
+      currentStage = 5;
+    }
+
+    function createHearts() {
+      const heartsContainer = document.getElementById('hearts');
+      const heartSymbols = ['💖', '💕', '💗', '💝', '🌸', '🎀', '✨'];
+      
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.innerHTML = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.animationDelay = Math.random() * 2 + 's';
+          heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+          heartsContainer.appendChild(heart);
+          
+          // Remove heart after animation
+          setTimeout(() => {
+            if (heart.parentNode) {
+              heart.parentNode.removeChild(heart);
+            }
+          }, 7000);
+        }, i * 200);
+      }
+    }
+
+    // Create floating hearts periodically when on final stage
+    setInterval(() => {
+      if (currentStage === 3) {
+        const heartsContainer = document.getElementById('hearts');
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = ['💖', '💕', '🌸'][Math.floor(Math.random() * 3)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (Math.random() * 2 + 5) + 's';
+        heartsContainer.appendChild(heart);
+        
+        setTimeout(() => {
+          if (heart.parentNode) {
+            heart.parentNode.removeChild(heart);
+          }
+        }, 7000);
+      }
+    }, 3000);
+  </script>
+</body>
+</html>
